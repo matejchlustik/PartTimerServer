@@ -5,7 +5,7 @@ const connectDB = require("./config/db")
 const cors = require("cors")
 const offerRoutes = require("./routes/offerRoutes")
 const userRoutes = require("./routes/userRoutes")
-const port = process.env.port || 8000
+const port = process.env.PORT || 8000
 const { errorHandler } = require("./middleware/errorMiddleware");
 
 connectDB()
