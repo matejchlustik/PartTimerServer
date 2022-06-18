@@ -21,6 +21,10 @@ const offerSchema = mongoose.Schema({
     contact: {
         type: String,
         required: [true, "Please add contact info"]
+    },
+    location: {
+        type: String,
+        required: [true, "Please add location"]
     }
 },
     {

@@ -23,7 +23,7 @@ const getOffer = asyncHandler(async (req, res) => {
 // @access public
 const getSearchOffer = asyncHandler(async (req, res) => {
     const queryParam = req.params.searchQuery
-    const offers = await Offer.find({ title: { $regex: queryParam, $options: 'i' } })
+    const offers = await Offer.find({ title: { $regex: queryParam, $options: 'i' } }).limit(5)
     res.status(200).json(offers)
 })
 
@@ -31,9 +31,9 @@ const getSearchOffer = asyncHandler(async (req, res) => {
 // @route POST /api/offers
 // @access private
 const setOffer = asyncHandler(async (req, res) => {
-    const { title, description, pay, contact } = req.body
+    const { title, description, pay, contact, location } = req.body
 
-    if (!title || !description) {
+    if (!title || !description || !pay || !contact || !location) {
         res.status(400)
         throw new Error("Please add all fields")
     }
@@ -43,7 +43,8 @@ const setOffer = asyncHandler(async (req, res) => {
         title,
         description,
         pay,
-        contact
+        contact,
+        location
     })
 
     res.status(201).json(offer)
@@ -54,6 +55,14 @@ const setOffer = asyncHandler(async (req, res) => {
 // @access private
 const updateOffer = asyncHandler(async (req, res) => {
     const offer = await Offer.findById(req.params.id)
+
+    const { title, description, pay, contact, location } = req.body
+
+    //check if any information is missing
+    if (!title || !description || !pay || !contact || !location) {
+        res.status(400)
+        throw new Error("Please add all fields")
+    }
 
     if (!offer) {
         res.status(400)
